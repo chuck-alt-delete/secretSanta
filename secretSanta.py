@@ -97,7 +97,7 @@ Santa
     server.quit()
 
 
-def update_json():
+def update_json(file):
     # TODO: create function to take the output santaDict and update the santaData with new
     # entries for "lastYear". Dump the results in json and write to next year's file.
     pass
