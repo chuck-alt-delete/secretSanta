@@ -21,6 +21,7 @@ secrets_file = "santaDataSecrets"
 def main():
     santaData = load_data(file)
     santaDict = assign_santas(santaData)
+    # print(santaDict)
     email_assignments(santaData, santaDict, secrets_file)
     # update_json(santaData, santaDict, outputFile.json)
 
@@ -79,13 +80,13 @@ Who you have for Secret Santa Stockings: {giftee}
 
 Hey {gifter}!
 
-We will be celebrating Christmas in Ashland (or Dunsmuir) this year, so get pumped! Expect the standard: Tamales, Pajamas, Movies, Cookies, and Games! As it gets closer we will finalize our location based on Joey's work schedule and all of our COVID testing plans.
+We will be celebrating Christmas in Concord this year! As it gets closer we will finalize dates based on everyone’s work schedule, expect to hang sometime between December 18th and 31st.
 
-For the fifth year in a row, we are doing Secret Stockings! You get to fill the stocking of {giftee} this year! 
+For the sixth year in a row, we are doing Secret Stockings! You get to fill the stocking of {giftee} this year!
 
-Additionally, please bring a $20 (or less!) gift to play a holiday swap game with.
+Ben and Sasa will be providing Left Right Left prize, so no need to bring one 😊
 
-See you soon!!
+In addition to the standard traditions (Tamales, Pajamas, Movies, Cookies, and Games), we’ll be doing a COOKOFF! Ben and Sasa will text more info, but you’ve probably already heard that we’ll be challenging each other to beat our favorite recipes and enjoying some delicious competition. See you soon!!
 
 Love,
 Santa
