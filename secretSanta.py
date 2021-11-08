@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 #### Initialize Variables
-file = 'santaData2020.json'
+file = 'santaData2021.json'
 secrets_file = "santaDataSecrets"
 # TODO: define output json file for next year's input data
 
@@ -112,10 +112,8 @@ def goodlist(array, santaData):
         The list is called "good" if no person has themselves or anyone they aren't supposed
         to have for secret santa.
     '''
-    for index in range(len(array)):
-        gifter_id = index
-        giftee_id = array[index]
-        if array[index] == index:
+    for gifter_id, giftee_id in enumerate(array):
+        if gifter_id == giftee_id:
             return False # You can't have yourself for secret santa
         elif santaData[str(giftee_id)]["name"] in santaData[str(gifter_id)]["noSanta"]:
             return False # can't have someone on your noSanta list
