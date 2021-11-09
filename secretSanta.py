@@ -71,7 +71,7 @@ def email_assignments(santaData, santaDict, secrets_file):
         message = MIMEMultipart()
         message['From'] = email
         message['To'] = santaData[id]["email"]
-        message['Subject'] = "Casias Christmas 2020"
+        message['Subject'] = "Casias Christmas 2021"
         body = f'''
 -------------------------------------------------
 You: {gifter}
