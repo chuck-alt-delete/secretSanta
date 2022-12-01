@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 #### Initialize Variables
-file = 'santaData2021.json'
+file = 'santaData2022.json'
 secrets_file = "santaDataSecrets"
 # TODO: define output json file for next year's input data
 
@@ -71,7 +71,7 @@ def email_assignments(santaData, santaDict, secrets_file):
         message = MIMEMultipart()
         message['From'] = email
         message['To'] = santaData[id]["email"]
-        message['Subject'] = "Casias Christmas 2021"
+        message['Subject'] = "Casias Christmas 2022"
         body = f'''
 -------------------------------------------------
 You: {gifter}
@@ -80,13 +80,22 @@ Who you have for Secret Santa Stockings: {giftee}
 
 Hey {gifter}!
 
-We will be celebrating Christmas in Concord this year! As it gets closer we will finalize dates based on everyone’s work schedule, expect to hang sometime between December 18th and 31st.
+For the seventh year in a row, we are doing Secret Stockings! You get to fill the stocking of {giftee} this year!
 
-For the sixth year in a row, we are doing Secret Stockings! You get to fill the stocking of {giftee} this year!
+We will be celebrating Christmas in Concord on January 1st! Your stocking stuffers
+for {giftee} should include at least one item you made yourself. Examples include but are not limited to:
+- cookies
+- poems
+- paintings
+- knit hats
+- cocktails in a jar
+- performances
+- vehicles
 
-Ben and Sasa will be providing Left Right Left prize, so no need to bring one 😊
+In addition to your one hand-made item, we recommend you try to support local small businesses, but of course,
+do what you gotta do.
 
-In addition to the standard traditions (Tamales, Pajamas, Movies, Cookies, and Games), we’ll be doing a COOKOFF! Ben and Sasa will text more info, but you’ve probably already heard that we’ll be challenging each other to beat our favorite recipes and enjoying some delicious competition. See you soon!!
+Can't wait to celebrate the season together!
 
 Love,
 Santa
