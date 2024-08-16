@@ -1,7 +1,7 @@
 .idea/
 santaData*
 *.json
-*.db
+*.db*
 !sampleData.json
 venv
 __pycache__
