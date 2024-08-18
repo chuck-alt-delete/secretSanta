@@ -1,7 +1,6 @@
 from fasthtml.common import *
 
-app = FastHTMLWithLiveReload()
-
+app = FastHTML(hdrs=picolink)
 db = database('data/santa.db')
 
 
@@ -14,7 +13,7 @@ def get_homepage():
                 P("hello", style="text-align: center;")
             )
         ),
-        A(href='/assignments', title="past assignments")
+        A("Past assignments", href='/assignments', title="past assignments")
     )
 
 @app.get("/assignments")
@@ -41,10 +40,12 @@ def get_assignments():
     head = Thead(
         *[Th(column) for column in ("gifter", "giftee", "year")],
         cls="bg-purple/10")
-    return Table(
-        head,
-        *rows,
-        style='margin-left: auto; margin-right:auto'
+    return Titled("Past Secret Santa Asignments",
+        Table(
+                head,
+                *rows,
+                style='margin-left: auto; margin-right:auto'
+        )
     )
 
 serve()

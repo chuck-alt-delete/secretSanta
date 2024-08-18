@@ -4,7 +4,7 @@ import sys
 import re
 
 # Connect to SQLite database (or create it if it doesn't exist)
-conn = sqlite3.connect('test.db')
+conn = sqlite3.connect('data/santa.db')
 cursor = conn.cursor()
 
 # Check if filename is provided as an argument
