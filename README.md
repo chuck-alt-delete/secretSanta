@@ -4,20 +4,20 @@ This program assigns secret santas and emails everyone who they have.  Each pers
 
 For more info about sending emails with python, see http://naelshiab.com/tutorial-send-email-python/. Also note that gmail requires you to create an application specific password for authentication. Go to https://myaccount.google.com/apppasswords and create an application password for this app.
 
-For now, you have to go back to the outbox for last year to update the "lastYear" field for each member of the family. There is a TODO to automatically update the json for next year.
-
 ## Instructions
 
 0. Clone this repo.
+1. Install python requirements with `python3 -m pip install -r requirements.txt`
 1. Create a gmail API key and create a file called `santaDataSecrets` that looks like:
     ```
     email=myemail@gmail.com
     password=myapikey
     ```
-2. Use the `sampleData.json` as a template to create a json file for your user data (names and emails). By convention, json files that start with `santaData` are ignored in git to protect your users' email addresses from source control. Example: `santaData2021.json`. Keep these secret files locally or in secure storage (dropbox, lastpass, bitwarden, etc.).
-3. Edit the `file` and `secrets_file` variables in `secretSanta.py` to point to your user json file (e.g. `santaData2021.josn`) and secrets file (`santaDataSecrets`).
-4. Run the python script to send the emails:
+1. Initialize your `data/santa.db` database with `./initialize_db.sh`
+2. Keep `santaDataSecrets` and `data/santa.db` locally and back up in secure storage (dropbox, lastpass, bitwarden, etc.).
+4. Run the application and open to http://localhost:5001:
     ```bash
-    python3 secretSanta.py
+    python3 app.py
     ```
+1. Use the website to view past assignments, create this year's assignments, and email your family with their assignments.
 5. Don't peek at your outbox (until next year when you have to make a new santaData json file)!
