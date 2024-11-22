@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 #### Initialize Variables
-file = 'santaData2022.json'
+file = 'santaData2023.json'
 secrets_file = "santaDataSecrets"
 # TODO: define output json file for next year's input data
 
@@ -71,7 +71,7 @@ def email_assignments(santaData, santaDict, secrets_file):
         message = MIMEMultipart()
         message['From'] = email
         message['To'] = santaData[id]["email"]
-        message['Subject'] = "Casias Christmas 2022"
+        message['Subject'] = "Casias Christmas 2023"
         body = f'''
 -------------------------------------------------
 You: {gifter}
@@ -80,20 +80,10 @@ Who you have for Secret Santa Stockings: {giftee}
 
 Hey {gifter}!
 
-For the seventh year in a row, we are doing Secret Stockings! You get to fill the stocking of {giftee} this year!
+For the eighth year in a row, we are doing Secret Stockings! You get to fill the stocking of {giftee} this year!
 
-We will be celebrating Christmas in Concord on January 1st! Your stocking stuffers
-for {giftee} should include at least one item you made yourself. Examples include but are not limited to:
-- cookies
-- poems
-- paintings
-- knit hats
-- cocktails in a jar
-- performances
-- vehicles
-
-In addition to your one hand-made item, we recommend you try to support local small businesses, but of course,
-do what you gotta do.
+We will be celebrating Christmas in Dunsmuir on December 25th! Your stocking stuffers
+for {giftee} can be whatever expresses your love and care for them, big or small, handmade or store bought. Have fun with it!
 
 Can't wait to celebrate the season together!
 
@@ -106,11 +96,6 @@ Santa
 
     server.quit()
 
-
-def update_json(file):
-    # TODO: create function to take the output santaDict and update the santaData with new
-    # entries for "lastYear". Dump the results in json and write to next year's file.
-    pass
 
 
 #### Helper function helper functions

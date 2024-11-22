@@ -1,4 +1,8 @@
 .idea/
 santaData*
 *.json
+*.db*
 !sampleData.json
+venv
+__pycache__
+.sesskey
