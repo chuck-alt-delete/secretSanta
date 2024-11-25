@@ -177,12 +177,20 @@ Happy gifting!
         "Send Secret Santa Emails",
         navbar(),
         Card(
+            P(
+                "Sample email body:"
+            ),
+            P(
+                default_body
+            )
+        ),
+        Card(
             Form(
                 Input(id="year", placeholder="Enter year", type="number", name="year", required=True),
                 Textarea(
                     id="email_body", 
                     name="email_body", 
-                    placeholder="Enter the email body here...",
+                    placeholder="Enter email body here",
                     required=True,
                     value=default_body,
                     style="width: 100%; height: 200px;"
@@ -199,7 +207,7 @@ Happy gifting!
     )
 
 @app.post("/send-email")
-def post_send_email(year: int, email_body: str, dry_run: bool = True):
+def post_send_email(year: int, email_body: str, dry_run: bool = False):
     # Fetch assignments for the specified year
     assignments = db.query(
         """
