@@ -112,7 +112,7 @@ def post_new_assignment(year: int):
     users = db.query("SELECT id, name FROM Users")
 
     # Combine restrictions:
-    # 1. Permanent restrictions from UserRestrictions (year IS NULL)
+    # 1. Permanent and current restrictions from UserRestrictions (year IS NULL or current year)
     # 2. Last year's assignments from SecretSantaAssignments
     restrictions = db.query(
         """
@@ -120,30 +120,36 @@ def post_new_assignment(year: int):
         from (
             SELECT user_id, restricted_user_id
                 FROM UserRestrictions
-                WHERE year IS NULL
+                WHERE year IS NULL OR year = ?
         union 
             SELECT gifter_id AS user_id, giftee_id AS restricted_user_id
             FROM SecretSantaAssignments
             WHERE year = ?
         )
         """,
-        (year - 1,)
+        (year, year - 1,)
     )
 
     
     # Prepare data structures for assignment
     user_ids = [user["id"] for user in users]
     random.shuffle(user_ids)
-    restricted = {r["user_id"]: r["restricted_user_id"] for r in restrictions}
+    restricted = {}
+    for r in restrictions:
+        user_id = r["user_id"]
+        restricted_user_id = r["restricted_user_id"]
+        if user_id not in restricted:
+            restricted[user_id] = []
+        restricted[user_id].append(restricted_user_id)
     
     # Generate valid assignments
     assignments = {}
     attempts = 0
-    max_attempts = 100  # Limit retries
+    max_attempts = 1000  # Limit retries
     while attempts < max_attempts:
         random.shuffle(user_ids)
         if is_valid_assignment(user_ids, restricted):
-            assignments = {gifter: giftee for gifter, giftee in zip(user_ids, user_ids[1:] + user_ids[:1])}
+            assignments = {gifter: giftee for gifter, giftee in enumerate(user_ids)}
             break
         attempts += 1
     
@@ -181,12 +187,23 @@ Happy gifting!
                 "Sample email body:"
             ),
             P(
+                "Casias Family Christmas {year}"
+            ),
+            P(
                 default_body
             )
         ),
         Card(
             Form(
                 Input(id="year", placeholder="Enter year", type="number", name="year", required=True),
+                Textarea(
+                    id="email_subject",
+                    name="email_subject",
+                    placeholder="Enter email subject here",
+                    required=True,
+                    value="Casias Family Christmas {year}"
+
+                ),
                 Textarea(
                     id="email_body", 
                     name="email_body", 
@@ -207,7 +224,7 @@ Happy gifting!
     )
 
 @app.post("/send-email")
-def post_send_email(year: int, email_body: str, dry_run: bool = False):
+def post_send_email(year: int, email_subject:str, email_body: str, dry_run: bool = False):
     # Fetch assignments for the specified year
     assignments = db.query(
         """
@@ -235,6 +252,7 @@ def post_send_email(year: int, email_body: str, dry_run: bool = False):
             secrets = dict(line.strip().split("=") for line in secret)
             sender_email = secrets["email"]
 
+        subject = "Secret Santa Test {year}".format(year=year)
         body = "Secret Santa Assignments:\n\n"
         for assignment in assignments:
             body += f"{assignment['gifter_name']} -> {assignment['giftee_name']}\n"
@@ -244,7 +262,8 @@ def post_send_email(year: int, email_body: str, dry_run: bool = False):
             "Santa Admin",  # Gifter (Admin)
             "Santa Assignments",  # Giftee (Placeholder)
             year,
-            body
+            body,
+            subject
         )
 
         return Titled(
@@ -254,6 +273,7 @@ def post_send_email(year: int, email_body: str, dry_run: bool = False):
         )
     else:
         # Regular email sending
+        customized_subject = email_subject.format(year=year)
         for assignment in assignments:
             customized_body = email_body.format(
                 gifter=assignment["gifter_name"],
@@ -264,7 +284,8 @@ def post_send_email(year: int, email_body: str, dry_run: bool = False):
                 assignment["gifter_name"],
                 assignment["giftee_name"],
                 year,
-                customized_body
+                customized_body,
+                customized_subject
             )
     
     return Titled(
@@ -274,12 +295,12 @@ def post_send_email(year: int, email_body: str, dry_run: bool = False):
     )
 
 def is_valid_assignment(user_ids, restricted):
-    for gifter_id, giftee_id in zip(user_ids, user_ids[1:] + user_ids[:1]):
-        if giftee_id == gifter_id or restricted.get(gifter_id) == giftee_id:
+    for gifter_id, giftee_id in enumerate(user_ids):
+        if giftee_id == gifter_id or giftee_id in restricted.get(gifter_id):
             return False
     return True
 
-def send_email(email, gifter, giftee, year, email_body):
+def send_email(email, gifter, giftee, year, email_body, email_subject):
 
     # Load email credentials
     with open("santaDataSecrets", "r") as secret:
@@ -293,7 +314,7 @@ def send_email(email, gifter, giftee, year, email_body):
     server.login(sender_email, sender_password)
 
     # Create email
-    subject = f"Casias Family Christmas Secret Santa {year}"
+    subject = email_subject
     body = email_body  # Use the custom body passed to the function
     message = MIMEMultipart()
     message["From"] = sender_email
